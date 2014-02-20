@@ -73,11 +73,11 @@ public class OrderServiceImpl implements OrderService {
 	
 	private Order save(Order order) {
 		OrderStatus currentStatus = null;
-		try {
-			currentStatus = findBy(order.getId()).getStatus();
-		} catch (NoResultException e) {
-			if (order.getId() != null) {
-				throw e;
+		if (order.getId() != null) {
+			try {
+				currentStatus = findBy(order.getId()).getStatus();
+			} catch (NoResultException e) {
+					throw e;
 			}
 		}
 		order = this.orderRepository.save(order);

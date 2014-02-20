@@ -23,7 +23,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableJpaRepositories(JPAConfiguration.PACK_SCAN_REPOSITORIES)
 public class JPAConfiguration {
 
-	public static final String PACK_SCAN_REPOSITORIES = "com.krustyburger.order.backend";
+	public static final String PACK_SCAN_REPOSITORIES = "com.krustyburger.order.backend.repository";
 	private static final String DB_DRIVER = "com.mysql.jdbc.Driver";
 	private static final String DB_URL = "jdbc:mysql://localhost:3306/order";
 	private static final String DB_USER_NAME = "root";
