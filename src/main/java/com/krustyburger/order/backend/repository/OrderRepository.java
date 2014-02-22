@@ -1,6 +1,5 @@
 package com.krustyburger.order.backend.repository;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -35,36 +34,28 @@ public class OrderRepository {
 		return order;
 	}
 	
+	public List<Order> find() {
+		CriteriaBuilder criteriaBuilder = this.orderDAO.getEntityManager().getCriteriaBuilder();
+		CriteriaQuery<Order> criteriaQuery = criteriaBuilder.createQuery(Order.class);
+		Root<Order> root = criteriaQuery.from(Order.class);
+		Fetch<Order, OrderItem> orderItemFetch =  root.fetch(Order_.items, JoinType.LEFT);
+		orderItemFetch.fetch(OrderItem_.item);		
+		Predicate[] predicates = {criteriaBuilder.notEqual(root.get(Order_.status), OrderStatus.DELIVERED)};
+		criteriaQuery.where(predicates);
+		criteriaQuery.select(root);
+		return this.orderDAO.find(criteriaQuery);
+	}	
+	
 	public Order findBy(Long id) {
 		CriteriaBuilder criteriaBuilder = this.orderDAO.getEntityManager().getCriteriaBuilder();
 		CriteriaQuery<Order> criteriaQuery = criteriaBuilder.createQuery(Order.class);
 		Root<Order> root = criteriaQuery.from(Order.class);
 		Fetch<Order, OrderItem> orderItemFetch =  root.fetch(Order_.items, JoinType.LEFT);
 		orderItemFetch.fetch(OrderItem_.item);
-
 		Predicate[] predicates = {criteriaBuilder.equal(root.get(Order_.id), id)};
 		criteriaQuery.where(predicates);
-		
 		criteriaQuery.select(root);
 		return this.orderDAO.get(criteriaQuery);
-	}
-	
-	public List<Order> findBy(OrderStatus... statusArray) {
-		CriteriaBuilder criteriaBuilder = this.orderDAO.getEntityManager().getCriteriaBuilder();
-		CriteriaQuery<Order> criteriaQuery = criteriaBuilder.createQuery(Order.class);
-		Root<Order> root = criteriaQuery.from(Order.class);
-		Fetch<Order, OrderItem> orderItemFetch =  root.fetch(Order_.items, JoinType.LEFT);
-		orderItemFetch.fetch(OrderItem_.item);
-		
-		List<Predicate> predicates = new ArrayList<>();
-		for(OrderStatus status : statusArray) {
-			predicates.add(criteriaBuilder.equal(root.get(Order_.status), status));
-		}
-		Predicate orPredicate = criteriaBuilder.or(predicates.toArray(new Predicate[predicates.size()]));
-		criteriaQuery.where(orPredicate);
-
-		criteriaQuery.select(root).distinct(true);
-		return this.orderDAO.find(criteriaQuery);
 	}
 	
 }

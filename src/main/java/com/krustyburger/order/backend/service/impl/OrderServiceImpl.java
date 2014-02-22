@@ -3,12 +3,8 @@ package com.krustyburger.order.backend.service.impl;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.NoResultException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.krustyburger.order.backend.model.Item;
 import com.krustyburger.order.backend.model.Order;
 import com.krustyburger.order.backend.model.OrderItem;
@@ -32,26 +28,16 @@ public class OrderServiceImpl implements OrderService {
 	private OrderItemService orderItemService;
 	
 	@Override
-	public List<Order> findPendentAndInProgress() {
-		return this.orderRepository.findBy(OrderStatus.PENDENT, OrderStatus.IN_PROGRESS);
+	public List<Order> find() {
+		return this.orderRepository.find();
 	}
-	
-	@Override
-	public List<Order> findFinalized() {
-		return this.orderRepository.findBy(OrderStatus.FINALIZED);
-	}	
 	
 	@Override
 	public Order findBy(Long id) {
-		try {
-			return this.orderRepository.findBy(id);
-		} catch (NoResultException e) {
-			return null;
-		}
+		return this.orderRepository.findBy(id);
 	}
 	
 	@Override
-	@Transactional
 	public Long add(Long[] items, String address) {
 		Order order = new Order();
 		order.setStatusDate(new Date());
@@ -63,28 +49,29 @@ public class OrderServiceImpl implements OrderService {
 	}
 	
 	@Override
-	public Order updateStatus(Long id, OrderStatus status) {
+	public Order updateStatus(Long id) {
 		Order order = findBy(id);		
-		order.setStatus(status);
+		order.setStatus(order.getStatus().getNextStatus());
 		order.setStatusDate(new Date());		
 		order = this.save(order);
 		return order;
 	}
 	
 	private Order save(Order order) {
-		OrderStatus currentStatus = null;
-		if (order.getId() != null) {
-			try {
-				currentStatus = findBy(order.getId()).getStatus();
-			} catch (NoResultException e) {
-					throw e;
-			}
-		}
+		Order currentOrder = order.getId() != null ? findBy(order.getId()) : null;
+		validate(order, currentOrder);
 		order = this.orderRepository.save(order);
-		if (currentStatus == null || !currentStatus.equals(order.getStatus())) {
-			saveStage(order);
-		}
+		saveStage(order);
 		return order;
+	}
+	
+	private void validate(Order order, Order currentOrder) {
+		if (order.getId() != null && currentOrder == null) {
+			throw new RuntimeException("Order not found for id" + order.getId());
+		}
+		if (currentOrder != null && currentOrder.getStatus().getNextStatus() == null){
+			throw new RuntimeException("There is no next step for the order");
+		}
 	}
 	
 	private void saveStage(Order order) {

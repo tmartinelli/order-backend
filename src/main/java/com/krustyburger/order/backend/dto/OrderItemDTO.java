@@ -7,6 +7,7 @@ public class OrderItemDTO implements Serializable {
 	private static final long serialVersionUID = 2929787416917997351L;
 
 	private Long id;
+	
 	private ItemDTO item;
 	
 	public Long getId() {

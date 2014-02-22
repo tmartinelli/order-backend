@@ -16,7 +16,7 @@ import com.krustyburger.order.backend.service.ItemService;
 import com.krustyburger.order.backend.translator.ItemTranslator;
 
 @Controller
-@Path("/item")
+@Path("/kburger")
 @Produces(MediaType.APPLICATION_JSON)
 public class ItemController {
 
@@ -27,8 +27,8 @@ public class ItemController {
 	private ItemTranslator itemTranslator;
 	
 	@GET
-	@Path("/findAll")
-	public List<ItemDTO> findAll() {
+	@Path("/items")
+	public List<ItemDTO> find() {
 		List<Item> items = this.itemService.findAll();
 		return this.itemTranslator.entityToDTO(items);
 	}

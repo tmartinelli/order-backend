@@ -7,4 +7,17 @@ public enum OrderStatus {
 	FINALIZED,
 	DELIVERED;
 	
+	public OrderStatus getNextStatus(){
+		switch (this) {
+		case PENDENT:
+			return IN_PROGRESS;
+		case IN_PROGRESS:
+			return FINALIZED;
+		case FINALIZED:
+			return DELIVERED;
+		default:
+			return null;
+		}
+	}
+	
 }

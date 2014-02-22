@@ -4,14 +4,23 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+
+import com.krustyburger.order.backend.util.JsonDateSerializer;
+
 public class OrderDTO implements Serializable {
 
 	private static final long serialVersionUID = -7505623403031862554L;
 
 	private Long id;
+	
 	private String status;
+	
+	@JsonSerialize(using = JsonDateSerializer.class)
 	private Date statusDate;
+	
 	private String address;
+	
 	private List<OrderItemDTO> items;
 	
 	public Long getId() {

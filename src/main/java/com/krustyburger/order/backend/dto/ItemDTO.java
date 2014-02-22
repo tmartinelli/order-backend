@@ -7,8 +7,11 @@ public class ItemDTO implements Serializable {
 	private static final long serialVersionUID = -1624089740593302884L;
 
 	private Long id;
+	
 	private String name;
+	
 	private String description;
+	
 	private Double price;
 
 	public Long getId() {

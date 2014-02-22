@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
@@ -37,7 +38,11 @@ public abstract class BaseDAO<T, ID> {
 	
     public T get(CriteriaQuery<T> criteriaQuery) {
 		TypedQuery<T> typedQuery = this.entityManager.createQuery(criteriaQuery);
-		return typedQuery.getSingleResult();
+		try {
+			return typedQuery.getSingleResult();
+		} catch (NoResultException e) {
+			return null;
+		}
 	}    
 	
 	@Transactional

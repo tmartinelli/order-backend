@@ -23,6 +23,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableJpaRepositories(JPAConfiguration.PACK_SCAN_REPOSITORIES)
 public class JPAConfiguration {
 
+	//TODO: Put properties on environment variables
 	public static final String PACK_SCAN_REPOSITORIES = "com.krustyburger.order.backend.repository";
 	private static final String DB_DRIVER = "com.mysql.jdbc.Driver";
 	private static final String DB_URL = "jdbc:mysql://localhost:3306/order";
