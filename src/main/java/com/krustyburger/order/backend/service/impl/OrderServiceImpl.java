@@ -38,14 +38,14 @@ public class OrderServiceImpl implements OrderService {
 	}
 	
 	@Override
-	public Long add(Long[] items, String address) {
+	public Order add(Long[] items, String address) {
 		Order order = new Order();
 		order.setStatusDate(new Date());
 		order.setStatus(OrderStatus.PENDENT);
 		order.setAddress(address);
 		order = save(order);
 		saveItems(order, items);
-		return order.getId();
+		return order;
 	}
 	
 	@Override

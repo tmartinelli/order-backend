@@ -10,7 +10,7 @@ public interface OrderService {
 	
 	Order findBy(Long id);
 	
-	Long add(Long[] items, String address);
+	Order add(Long[] items, String address);
 	
 	Order updateStatus(Long id);
 	

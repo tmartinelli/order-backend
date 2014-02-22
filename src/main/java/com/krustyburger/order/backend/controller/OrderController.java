@@ -2,7 +2,7 @@ package com.krustyburger.order.backend.controller;
 
 import java.util.List;
 
-import javax.ws.rs.FormParam;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -14,6 +14,7 @@ import javax.ws.rs.core.MediaType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
+import com.krustyburger.order.backend.dto.ItemListDTO;
 import com.krustyburger.order.backend.dto.OrderDTO;
 import com.krustyburger.order.backend.model.Order;
 import com.krustyburger.order.backend.service.OrderService;
@@ -47,8 +48,10 @@ public class OrderController {
 	
 	@POST
 	@Path("/order")
-	public Long add(@FormParam("item") Long[] items, @FormParam("address") String address) {
-		return this.orderService.add(items, address);
+	@Consumes(MediaType.APPLICATION_JSON)
+	public OrderDTO add(ItemListDTO itemListDTO) {
+		Order order = this.orderService.add(itemListDTO.getItems(), itemListDTO.getAddress());
+		return this.orderTranslator.entityToDTO(order);
 	}
 
 	@PUT
