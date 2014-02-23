@@ -42,6 +42,7 @@ public class OrderServiceImpl implements OrderService {
 	
 	@Override
 	public Order add(Long[] items, String address) throws KburgerAPIException {
+		validateAdd(items);
 		Order order = new Order();
 		order.setStatusDate(new Date());
 		order.setStatus(OrderStatus.PENDENT);
@@ -51,12 +52,18 @@ public class OrderServiceImpl implements OrderService {
 		return order;
 	}
 	
+	private void validateAdd(Long[] items) throws KburgerAPIException {
+		if (items == null || items.length == 0) {
+			throw new KburgerAPIException("Item list can not be empty");
+		}
+	}
+	
 	@Override
 	public Order updateStatus(Long id) throws KburgerAPIException {
 		Order order = new Order();
 		order.setId(id);
 		Order currentOrder = findBy(id);
-		validate(order, currentOrder);
+		validateUpdateStatus(order, currentOrder);
 		currentOrder.setStatus(order.getStatus().getNextStatus());
 		currentOrder.setStatusDate(new Date());		
 		order = this.save(currentOrder);
@@ -69,7 +76,7 @@ public class OrderServiceImpl implements OrderService {
 		return order;
 	}
 	
-	private void validate(Order order, Order currentOrder) throws KburgerAPIException {
+	private void validateUpdateStatus(Order order, Order currentOrder) throws KburgerAPIException {
 		if (order.getId() != null && currentOrder == null) {
 			throw new KburgerAPIException("Order not found for id " + order.getId());
 		}
