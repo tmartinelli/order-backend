@@ -20,11 +20,14 @@ import com.krustyburger.order.backend.translator.ItemTranslator;
 @Produces(MediaType.APPLICATION_JSON)
 public class ItemController {
 
-	@Autowired
 	private ItemService itemService;
-	
-	@Autowired
 	private ItemTranslator itemTranslator;
+
+	@Autowired
+	public ItemController(ItemService itemService, ItemTranslator itemTranslator) {
+		this.itemService = itemService;
+		this.itemTranslator = itemTranslator;
+	}
 	
 	@GET
 	@Path("/items")

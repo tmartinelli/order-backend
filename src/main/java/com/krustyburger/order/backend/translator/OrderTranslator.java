@@ -13,8 +13,12 @@ import com.krustyburger.order.backend.model.Order;
 @Component
 public class OrderTranslator {
 
-	@Autowired
 	private OrderItemTranslator orderItemTranslator;
+	
+	@Autowired
+	public OrderTranslator(OrderItemTranslator orderItemTranslator) {
+		this.orderItemTranslator = orderItemTranslator;
+	}
 	
 	public OrderDTO entityToDTO(Order entity) {
 		OrderDTO dto = null;

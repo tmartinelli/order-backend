@@ -10,8 +10,12 @@ import com.krustyburger.order.backend.service.OrderItemService;
 @Service
 public class OrderItemServiceImpl implements OrderItemService {
 
-	@Autowired
 	private OrderItemRepository orderItemRepository;
+	
+	@Autowired
+	public OrderItemServiceImpl(OrderItemRepository orderItemRepository) {
+		this.orderItemRepository = orderItemRepository;
+	}
 	
 	@Override
 	public OrderItem save(OrderItem orderItem) {

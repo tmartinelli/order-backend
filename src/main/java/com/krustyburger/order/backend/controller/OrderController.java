@@ -26,11 +26,14 @@ import com.krustyburger.order.backend.translator.OrderTranslator;
 @Produces(MediaType.APPLICATION_JSON)
 public class OrderController {
 	
-	@Autowired
 	private OrderService orderService;
+	private OrderTranslator orderTranslator;
 	
 	@Autowired
-	private OrderTranslator orderTranslator;
+	public OrderController(OrderService orderService, OrderTranslator orderTranslator) {
+		this.orderService = orderService;
+		this.orderTranslator = orderTranslator;
+	}
 	
 	@GET
 	@Path("/orders")

@@ -8,9 +8,7 @@ import org.codehaus.jackson.JsonGenerator;
 import org.codehaus.jackson.JsonProcessingException;
 import org.codehaus.jackson.map.JsonSerializer;
 import org.codehaus.jackson.map.SerializerProvider;
-import org.springframework.stereotype.Component;
 
-@Component
 public class JsonDateSerializer extends JsonSerializer<Date>{
  
 	//TODO: I18N

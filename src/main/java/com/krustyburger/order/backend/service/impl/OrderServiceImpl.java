@@ -22,17 +22,18 @@ import com.krustyburger.order.backend.validator.OrderValidator;
 @Service
 public class OrderServiceImpl implements OrderService {
 
-	@Autowired
 	private OrderRepository orderRepository;
-	
-	@Autowired
 	private OrderValidator orderValidator;
-	
-	@Autowired
 	private OrderStageService orderStageService;
+	private OrderItemService orderItemService;
 	
 	@Autowired
-	private OrderItemService orderItemService;
+	public OrderServiceImpl(OrderRepository orderRepository, OrderValidator orderValidator, OrderStageService orderStageService, OrderItemService orderItemService) {
+		this.orderRepository = orderRepository;
+		this.orderValidator = orderValidator;
+		this.orderStageService = orderStageService;
+		this.orderItemService = orderItemService;
+	}
 	
 	@Override
 	public List<Order> find() {
@@ -62,7 +63,7 @@ public class OrderServiceImpl implements OrderService {
 		order.setId(id);
 		Order currentOrder = findBy(id);
 		this.orderValidator.validateUpdateStatus(order, currentOrder);
-		currentOrder.setStatus(order.getStatus().getNextStatus());
+		currentOrder.setStatus(currentOrder.getStatus().getNextStatus());
 		currentOrder.setStatusDate(new Date());		
 		order = this.save(currentOrder);
 		return order;

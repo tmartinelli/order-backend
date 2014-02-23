@@ -12,8 +12,12 @@ import com.krustyburger.order.backend.service.ItemService;
 @Service
 public class ItemServiceImpl implements ItemService {
 
-	@Autowired
 	private ItemRepository itemRepository;
+	
+	@Autowired
+	public ItemServiceImpl(ItemRepository itemRepository) {
+		this.itemRepository = itemRepository;
+	}
 	
 	@Override
 	public List<Item> findAll() {
