@@ -16,6 +16,7 @@ import org.springframework.stereotype.Controller;
 
 import com.krustyburger.order.backend.dto.ItemListDTO;
 import com.krustyburger.order.backend.dto.OrderDTO;
+import com.krustyburger.order.backend.exception.KburgerAPIException;
 import com.krustyburger.order.backend.model.Order;
 import com.krustyburger.order.backend.service.OrderService;
 import com.krustyburger.order.backend.translator.OrderTranslator;
@@ -49,14 +50,14 @@ public class OrderController {
 	@POST
 	@Path("/order")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public OrderDTO add(ItemListDTO itemListDTO) {
+	public OrderDTO add(ItemListDTO itemListDTO) throws KburgerAPIException {
 		Order order = this.orderService.add(itemListDTO.getItems(), itemListDTO.getAddress());
 		return this.orderTranslator.entityToDTO(order);
 	}
 
 	@PUT
 	@Path("/order/{id}")
-	public OrderDTO updateStatus(@PathParam("id") Long id) {
+	public OrderDTO updateStatus(@PathParam("id") Long id) throws KburgerAPIException {
 		Order order = this.orderService.updateStatus(id);
 		return this.orderTranslator.entityToDTO(order);
 	}		
