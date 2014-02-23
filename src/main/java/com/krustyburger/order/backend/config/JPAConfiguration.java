@@ -4,6 +4,7 @@ import java.util.Properties;
 
 import javax.sql.DataSource;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -23,15 +24,24 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableJpaRepositories(JPAConfiguration.PACK_SCAN_REPOSITORIES)
 public class JPAConfiguration {
 
-	//TODO: Put properties on environment variables
+	@Value("${db.driver}")
+	private String driver;
+	
+	@Value("${db.url}")
+	private String url;
+	
+	@Value("${db.username}")
+	private String username;
+	
+	@Value("${db.password}")
+	private String password;
+	
+	@Value("${db.hbm2ddl.auto}")
+	private String hbm2ddlAuto;
+	
 	public static final String PACK_SCAN_REPOSITORIES = "com.krustyburger.order.backend.repository";
-	private static final String DB_DRIVER = "com.mysql.jdbc.Driver";
-	private static final String DB_URL = "jdbc:mysql://localhost:3306/order";
-	private static final String DB_USER_NAME = "root";
-	private static final String DB_PASSWORD = "root";
 	private static final String ENTITYMANAGER_PACKAGES_TO_SCAN = "com.krustyburger.order.backend.model";
 	private static final String HIBERNATE_HBM2DDL_AUTO_PROPERTY = "hibernate.hbm2ddl.auto";
-	private static final String HIBERNATE_HBM2DDL_AUTO_VALUE = "update";
 	
 	@Bean
 	public PlatformTransactionManager transactionManager() {
@@ -55,10 +65,10 @@ public class JPAConfiguration {
     @Bean
     public DataSource dataSource() {
     	DriverManagerDataSource dataSource = new DriverManagerDataSource();
-    	dataSource.setDriverClassName(DB_DRIVER);
-    	dataSource.setUrl(DB_URL);
-    	dataSource.setUsername(DB_USER_NAME);
-    	dataSource.setPassword(DB_PASSWORD);
+    	dataSource.setDriverClassName(this.driver);
+    	dataSource.setUrl(this.url);
+    	dataSource.setUsername(this.username);
+    	dataSource.setPassword(this.password);
     	return dataSource;
     }
 
@@ -73,7 +83,7 @@ public class JPAConfiguration {
     
     private Properties getJpaProperties() {
         Properties properties = new Properties();
-        properties.setProperty(HIBERNATE_HBM2DDL_AUTO_PROPERTY, HIBERNATE_HBM2DDL_AUTO_VALUE);
+        properties.setProperty(HIBERNATE_HBM2DDL_AUTO_PROPERTY, this.hbm2ddlAuto);
     	return properties;
     }    
 	
