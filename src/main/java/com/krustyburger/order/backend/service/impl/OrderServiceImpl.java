@@ -1,10 +1,12 @@
 package com.krustyburger.order.backend.service.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import com.krustyburger.order.backend.model.Item;
 import com.krustyburger.order.backend.model.Order;
 import com.krustyburger.order.backend.model.OrderItem;
@@ -44,7 +46,7 @@ public class OrderServiceImpl implements OrderService {
 		order.setStatus(OrderStatus.PENDENT);
 		order.setAddress(address);
 		order = save(order);
-		saveItems(order, items);
+		order.setItems(saveItems(order, items));
 		return order;
 	}
 	
@@ -82,15 +84,17 @@ public class OrderServiceImpl implements OrderService {
 		this.orderStageService.save(orderStage);
 	}
 	
-	private void saveItems(Order order, Long[] items) {
+	private List<OrderItem> saveItems(Order order, Long[] items) {
+		List<OrderItem> itemList = new ArrayList<>();
 		for (int i = 0; i < items.length; i++) {
 			Item item = new Item();
 			item.setId(items[i]);
 			OrderItem orderItem = new OrderItem();
 			orderItem.setOrder(order);
 			orderItem.setItem(item);
-			this.orderItemService.save(orderItem);
+			itemList.add(this.orderItemService.save(orderItem));
 		}
+		return itemList;
 	}
 
 }
