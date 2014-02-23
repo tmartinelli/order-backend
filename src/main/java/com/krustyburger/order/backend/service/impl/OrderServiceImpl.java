@@ -17,12 +17,16 @@ import com.krustyburger.order.backend.repository.OrderRepository;
 import com.krustyburger.order.backend.service.OrderItemService;
 import com.krustyburger.order.backend.service.OrderService;
 import com.krustyburger.order.backend.service.OrderStageService;
+import com.krustyburger.order.backend.validator.OrderValidator;
 
 @Service
 public class OrderServiceImpl implements OrderService {
 
 	@Autowired
 	private OrderRepository orderRepository;
+	
+	@Autowired
+	private OrderValidator orderValidator;
 	
 	@Autowired
 	private OrderStageService orderStageService;
@@ -42,7 +46,7 @@ public class OrderServiceImpl implements OrderService {
 	
 	@Override
 	public Order add(Long[] items, String address) throws KburgerAPIException {
-		validateAdd(items);
+		this.orderValidator.validateAdd(items);
 		Order order = new Order();
 		order.setStatusDate(new Date());
 		order.setStatus(OrderStatus.PENDENT);
@@ -52,18 +56,12 @@ public class OrderServiceImpl implements OrderService {
 		return order;
 	}
 	
-	private void validateAdd(Long[] items) throws KburgerAPIException {
-		if (items == null || items.length == 0) {
-			throw new KburgerAPIException("Item list can not be empty");
-		}
-	}
-	
 	@Override
 	public Order updateStatus(Long id) throws KburgerAPIException {
 		Order order = new Order();
 		order.setId(id);
 		Order currentOrder = findBy(id);
-		validateUpdateStatus(order, currentOrder);
+		this.orderValidator.validateUpdateStatus(order, currentOrder);
 		currentOrder.setStatus(order.getStatus().getNextStatus());
 		currentOrder.setStatusDate(new Date());		
 		order = this.save(currentOrder);
@@ -74,15 +72,6 @@ public class OrderServiceImpl implements OrderService {
 		order = this.orderRepository.save(order);
 		saveStage(order);
 		return order;
-	}
-	
-	private void validateUpdateStatus(Order order, Order currentOrder) throws KburgerAPIException {
-		if (order.getId() != null && currentOrder == null) {
-			throw new KburgerAPIException("Order not found for id " + order.getId());
-		}
-		if (currentOrder != null && currentOrder.getStatus().getNextStatus() == null){
-			throw new KburgerAPIException("There is no next stage for the order");
-		}
 	}
 	
 	private void saveStage(Order order) {
