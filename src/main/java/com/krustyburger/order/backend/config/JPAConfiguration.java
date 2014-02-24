@@ -7,7 +7,7 @@ import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+//import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.JpaDialect;
 import org.springframework.orm.jpa.JpaTransactionManager;
@@ -21,7 +21,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
 @EnableTransactionManagement
-@EnableJpaRepositories(JPAConfiguration.PACK_SCAN_REPOSITORIES)
 public class JPAConfiguration {
 
 	@Value("${db.driver}")
@@ -39,7 +38,6 @@ public class JPAConfiguration {
 	@Value("${db.hbm2ddl.auto}")
 	private String hbm2ddlAuto;
 	
-	public static final String PACK_SCAN_REPOSITORIES = "com.krustyburger.order.backend.repository";
 	private static final String ENTITYMANAGER_PACKAGES_TO_SCAN = "com.krustyburger.order.backend.model";
 	private static final String HIBERNATE_HBM2DDL_AUTO_PROPERTY = "hibernate.hbm2ddl.auto";
 	

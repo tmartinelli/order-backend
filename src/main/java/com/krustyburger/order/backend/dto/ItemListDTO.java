@@ -1,7 +1,11 @@
 package com.krustyburger.order.backend.dto;
 
-public class ItemListDTO {
+import java.io.Serializable;
+
+public class ItemListDTO implements Serializable {
 	
+	private static final long serialVersionUID = -6248384064802738043L;
+
 	private Long[] items;
 
 	private String address;

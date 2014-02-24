@@ -22,8 +22,12 @@ import com.krustyburger.order.backend.model.Order_;
 @Repository
 public class OrderRepository {
 
-	@Autowired
 	private OrderDAO orderDAO;
+	
+	@Autowired
+	public OrderRepository(OrderDAO orderDAO) {
+		this.orderDAO = orderDAO;
+	}
 	
 	public Order save(Order order) {
 		if (order.getId() == null) {

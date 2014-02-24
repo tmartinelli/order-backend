@@ -10,13 +10,13 @@ import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.Logger;
+//import org.apache.log4j.Logger;
 import org.springframework.transaction.annotation.Transactional;
 
 public abstract class BaseDAO<T, ID> {
 	
-	private static Logger LOGGER = LoggerFactory.getLogger(BaseDAO.class);
+	private static Logger LOGGER = Logger.getLogger(BaseDAO.class);
 	
 	@PersistenceContext
 	private EntityManager entityManager;
