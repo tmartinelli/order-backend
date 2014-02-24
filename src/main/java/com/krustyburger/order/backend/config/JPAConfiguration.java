@@ -38,6 +38,12 @@ public class JPAConfiguration {
 	@Value("${db.hbm2ddl.auto}")
 	private String hbm2ddlAuto;
 	
+	@Value("${db.showSQL}")
+	private Boolean showSQL;
+	
+	@Value("${db.generateDDL}")
+	private Boolean generateDDL;
+	
 	private static final String ENTITYMANAGER_PACKAGES_TO_SCAN = "com.krustyburger.order.backend.model";
 	private static final String HIBERNATE_HBM2DDL_AUTO_PROPERTY = "hibernate.hbm2ddl.auto";
 	
@@ -73,8 +79,8 @@ public class JPAConfiguration {
     @Bean
     public JpaVendorAdapter jpaVendorAdapter() {
         HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
-        vendorAdapter.setShowSql(true);
-        vendorAdapter.setGenerateDdl(true);
+        vendorAdapter.setShowSql(this.showSQL);
+        vendorAdapter.setGenerateDdl(this.generateDDL);
         vendorAdapter.setDatabase(Database.MYSQL);
         return vendorAdapter;
     }

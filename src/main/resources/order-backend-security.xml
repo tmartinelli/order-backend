@@ -7,7 +7,7 @@
 						http://www.springframework.org/schema/security/spring-security-3.2.xsd">
  
 	<http>
-		<intercept-url pattern="/**" access="ROLE_COOK, ROLE_WAITER, ROLE_PARTNER" />
+		<intercept-url pattern="/**" access="ROLE_COOK, ROLE_WAITER, ROLE_TABLE, ROLE_PARTNER" />
 		<http-basic />
 	</http>
  
@@ -16,6 +16,8 @@
 			<user-service>
 				<user name="cook" password="123" authorities="ROLE_COOK" />
 				<user name="waiter" password="123" authorities="ROLE_WAITER" />
+				<user name="table1" password="123" authorities="ROLE_TABLE" />
+				<user name="table2" password="123" authorities="ROLE_TABLE" />
 				<user name="partner" password="123" authorities="ROLE_PARTNER" />
 			</user-service>
 		</authentication-provider>
